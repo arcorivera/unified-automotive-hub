@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'dealer', label: 'Dealer Management', icon: Building2, badge: 3 },
   { id: 'sales', label: 'Sales & Showroom', icon: ShoppingCart, badge: 12 },
-  { id: 'parts', label: 'Parts Distribution', icon: Package },
+  { id: 'parts', label: 'Parts Distribution', icon: Package, badge: 23 },
   { id: 'service', label: 'Aftersales & Service', icon: Wrench, badge: 8 },
   { id: 'erp', label: 'Enterprise (ERP)', icon: Warehouse },
   { id: 'crm', label: 'CRM', icon: Users },
