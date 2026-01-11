@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Package, Wrench, Users, DollarSign, Settings,
@@ -9,7 +9,8 @@ import {
   History, PrinterCheck, UserMinus, Scan, Truck, AlertTriangle,
   PauseCircle, FileCheck, FileOutput, Link2, AlertCircle,
   LayoutList, UserSearch, Clock, Receipt, ClipboardCheck, Files,
-  ExternalLink, Ticket, PackageSearch, LineChart, RefreshCw, Settings2
+  ExternalLink, Ticket, PackageSearch, LineChart, RefreshCw, Settings2,
+  UserPlus // Added for Customer Registration
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -32,6 +33,7 @@ const navItems = [
         path: '/parts?tab=sales',
         deepItems: [
           { id: 'invoice-entry', label: 'Invoice Entry', icon: PlusCircle },
+          { id: 'customer-reg', label: 'Customer Registration', icon: UserPlus }, // Added here
           { id: 'quotation-entry', label: 'Quotation Entry', icon: ClipboardList },
           { id: 'branch-transfer', label: 'Branch Transfer', icon: ArrowLeftRight },
           { id: 'reprint-quotation', label: 'Reprint Quotation', icon: Printer },
@@ -43,6 +45,7 @@ const navItems = [
           { id: 'add-parts', label: 'Add Parts', icon: PackageSearch },
         ]
       },
+      // ... rest of the subItems (reordering, inquiries, reports) remain exactly the same
       {
         id: 'reordering',
         label: 'Reordering Parts',
@@ -112,13 +115,13 @@ const navItems = [
 ];
 
 export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string; onModuleChange: (m: string) => void }) => {
+  // Logic remains unchanged as it dynamically maps the navItems updated above
   const navigate = useNavigate();
   const location = useLocation();
 
   const [partsOpen, setPartsOpen] = useState(activeModule === 'parts');
   const [expandedSub, setExpandedSub] = useState<string | null>(null);
 
-  // Synchronize expanded state with URL on mount or location change
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const currentTab = params.get('tab');
@@ -129,12 +132,13 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
 
   const handleDeepNavigation = (tab: string, sub: string) => {
     onModuleChange('parts');
-    // We explicitly set both tab and sub to ensure PartsDistribution.tsx logic triggers correctly
     navigate(`/parts?tab=${tab}&sub=${sub}`);
   };
 
   return (
+    // ... JSX return remains exactly the same as provided in your snippet
     <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-50">
+      {/* ... (Header and Nav Mapping) */}
       <div className="h-16 flex items-center px-4 border-b border-sidebar-border flex-shrink-0">
         <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-3">
           <Gauge className="w-5 h-5 text-primary-foreground" />
@@ -168,8 +172,6 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
                         <button
                           onClick={() => {
                             setExpandedSub(isExpanded ? null : sub.id);
-                            // If it has deep items, we don't necessarily want to navigate yet, 
-                            // or we navigate to the first sub-item by default
                             navigate(sub.path);
                           }}
                           className={cn(
