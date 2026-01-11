@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Pencil, Users } from 'lucide-react';
+import { Save, Pencil, Users, Trash2 } from 'lucide-react';
 
 interface User {
     name: string;
@@ -68,6 +68,18 @@ const CustomerRegistration: React.FC<CustomerRegistrationProps> = ({ currentUser
         setCustomers(updated);
         setFormData({ customerCode: '', customerName: '', address: '', contactNumber: '', abn: '', terms: 'COD', priceCode: 'RETAIL', creditLimit: 0 });
         setEditingId(null);
+    };
+
+    const deleteCustomer = (id: string) => {
+        if (window.confirm("Are you sure you want to delete this customer?")) {
+            const updated = customers.filter(c => c.id !== id);
+            localStorage.setItem('erp_customers_db', JSON.stringify(updated));
+            setCustomers(updated);
+            if (editingId === id) {
+                setEditingId(null);
+                setFormData({ customerCode: '', customerName: '', address: '', contactNumber: '', abn: '', terms: 'COD', priceCode: 'RETAIL', creditLimit: 0 });
+            }
+        }
     };
 
     const startEdit = (cust: Customer) => {
@@ -142,7 +154,7 @@ const CustomerRegistration: React.FC<CustomerRegistrationProps> = ({ currentUser
                             <th className="px-2 py-2 border-r border-slate-700">Terms</th>
                             <th className="px-2 py-2 border-r border-slate-700">ABN</th>
                             <th className="px-2 py-2 border-r border-slate-700">Address</th>
-                            <th className="px-2 py-2 text-center w-8">#</th>
+                            <th className="px-2 py-2 text-center w-16">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-black">
@@ -157,9 +169,14 @@ const CustomerRegistration: React.FC<CustomerRegistrationProps> = ({ currentUser
                                 <td className="px-2 py-2 border-r border-slate-100 text-[9px] font-medium">{cust.abn || '---'}</td>
                                 <td className="px-2 py-2 border-r border-slate-100 text-[9px] font-medium italic truncate max-w-[100px]">{cust.address}</td>
                                 <td className="px-2 py-2 text-center">
-                                    <button onClick={() => startEdit(cust)} className="p-1 text-slate-400 hover:text-amber-600 rounded transition-all">
-                                        <Pencil size={12} />
-                                    </button>
+                                    <div className="flex items-center justify-center gap-1">
+                                        <button onClick={() => startEdit(cust)} className="p-1 text-slate-400 hover:text-amber-600 rounded transition-all">
+                                            <Pencil size={12} />
+                                        </button>
+                                        <button onClick={() => deleteCustomer(cust.id)} className="p-1 text-slate-400 hover:text-red-600 rounded transition-all">
+                                            <Trash2 size={12} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
