@@ -10,7 +10,7 @@ import {
   PauseCircle, FileCheck, FileOutput, Link2, AlertCircle,
   LayoutList, UserSearch, Clock, Receipt, ClipboardCheck, Files,
   ExternalLink, Ticket, PackageSearch, LineChart, RefreshCw, Settings2,
-  UserPlus // Added for Customer Registration
+  UserPlus, ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -33,7 +33,7 @@ const navItems = [
         path: '/parts?tab=sales',
         deepItems: [
           { id: 'invoice-entry', label: 'Invoice Entry', icon: PlusCircle },
-          { id: 'customer-reg', label: 'Customer Registration', icon: UserPlus }, // Added here
+          { id: 'customer-reg', label: 'Customer Registration', icon: UserPlus },
           { id: 'quotation-entry', label: 'Quotation Entry', icon: ClipboardList },
           { id: 'branch-transfer', label: 'Branch Transfer', icon: ArrowLeftRight },
           { id: 'reprint-quotation', label: 'Reprint Quotation', icon: Printer },
@@ -45,7 +45,6 @@ const navItems = [
           { id: 'add-parts', label: 'Add Parts', icon: PackageSearch },
         ]
       },
-      // ... rest of the subItems (reordering, inquiries, reports) remain exactly the same
       {
         id: 'reordering',
         label: 'Reordering Parts',
@@ -115,7 +114,6 @@ const navItems = [
 ];
 
 export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string; onModuleChange: (m: string) => void }) => {
-  // Logic remains unchanged as it dynamically maps the navItems updated above
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -136,14 +134,20 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
   };
 
   return (
-    // ... JSX return remains exactly the same as provided in your snippet
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-50">
-      {/* ... (Header and Nav Mapping) */}
-      <div className="h-16 flex items-center px-4 border-b border-sidebar-border flex-shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-3">
-          <Gauge className="w-5 h-5 text-primary-foreground" />
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-50 shadow-xl">
+      {/* BRANDING HEADER: THUNDER AUTOMOTIVE */}
+      <div className="h-16 flex items-center px-4 border-b border-sidebar-border flex-shrink-0 bg-sidebar">
+        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center mr-3 shadow-lg shadow-primary/20">
+          <Gauge className="w-6 h-6 text-primary-foreground" />
         </div>
-        <span className="font-bold text-sm tracking-tight text-foreground uppercase">AutoDealer ERP</span>
+        <div className="flex flex-col">
+          <span className="font-black text-[14px] leading-none tracking-tighter text-foreground uppercase italic">
+            THUNDER
+          </span>
+          <span className="text-[9px] font-bold text-muted-foreground tracking-[0.2em] uppercase">
+            Automotive
+          </span>
+        </div>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-2 custom-scrollbar">
@@ -153,16 +157,16 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
               <Collapsible key={item.id} open={partsOpen} onOpenChange={setPartsOpen}>
                 <CollapsibleTrigger asChild>
                   <button className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all",
-                    activeModule === 'parts' ? "text-primary bg-primary/5" : "text-muted-foreground hover:bg-muted"
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-all",
+                    activeModule === 'parts' ? "text-primary bg-primary/10 shadow-sm" : "text-muted-foreground hover:bg-muted"
                   )}>
                     <item.icon className="w-5 h-5 flex-shrink-0" />
                     <span className="flex-1 text-left text-[11px] font-black uppercase tracking-widest">{item.label}</span>
-                    <ChevronDown className={cn("w-4 h-4 transition-transform", partsOpen ? "rotate-180" : "")} />
+                    <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", partsOpen ? "rotate-180" : "")} />
                   </button>
                 </CollapsibleTrigger>
 
-                <CollapsibleContent className="mt-1 ml-4 border-l border-sidebar-border pl-2 space-y-1 animate-in slide-in-from-top-2">
+                <CollapsibleContent className="mt-1 ml-4 border-l border-sidebar-border pl-2 space-y-1 animate-in slide-in-from-top-2 duration-200">
                   {item.subItems?.map((sub) => {
                     const isActiveSub = location.search.includes(`tab=${sub.id}`);
                     const isExpanded = expandedSub === sub.id;
@@ -175,7 +179,7 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
                             navigate(sub.path);
                           }}
                           className={cn(
-                            "w-full flex items-center justify-between px-3 py-1.5 rounded-md text-[11px] font-bold transition-all",
+                            "w-full flex items-center justify-between px-3 py-2 rounded-md text-[11px] font-bold transition-all",
                             isActiveSub ? "text-primary bg-primary/10" : "text-muted-foreground hover:bg-muted"
                           )}
                         >
@@ -200,7 +204,7 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
                                     handleDeepNavigation(sub.id, deep.id);
                                   }}
                                   className={cn(
-                                    "w-full text-left px-2 py-1.5 text-[10px] rounded hover:bg-muted transition-all flex items-center gap-2",
+                                    "w-full text-left px-2 py-2 text-[10px] rounded hover:bg-muted transition-all flex items-center gap-2",
                                     isActiveDeep ? "text-primary font-bold bg-primary/5" : "text-muted-foreground/70"
                                   )}
                                 >
@@ -225,8 +229,8 @@ export const Sidebar = ({ activeModule, onModuleChange }: { activeModule: string
                   navigate(item.id === 'dashboard' ? '/' : `/${item.id}`);
                 }}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all",
-                  activeModule === item.id ? "text-primary bg-primary/5" : "text-muted-foreground hover:bg-muted"
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-all",
+                  activeModule === item.id ? "text-primary bg-primary/10 shadow-sm" : "text-muted-foreground hover:bg-muted"
                 )}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
